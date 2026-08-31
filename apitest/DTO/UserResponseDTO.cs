@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+
 namespace apitest.DTO;
 
 public class UserResponseDTO

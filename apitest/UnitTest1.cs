@@ -94,8 +94,6 @@ public class Tests
         using HttpResponseMessage response = await client.DeleteAsync("users/2");
         //Проверяю успешность ответа
         response.EnsureSuccessStatusCode();
-        
-        
     }   
     
     [OneTimeTearDown]

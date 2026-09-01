@@ -44,10 +44,62 @@ public class Tests
         }
     }
     
+    [Test]
+    public async Task Test3()
+    {
+        // создаю ДТО
+        var userPayload = new CreateUserRequestDTO
+        {
+            Name = "Alex",
+            Job = "Zoo",
+        };
+        //Отправляю запрос
+        using HttpResponseMessage response = await client.PostAsJsonAsync("users", userPayload);
+       //Проверяю успешность ответа
+        response.EnsureSuccessStatusCode();
+        //Вытаскиваю контент из респонса
+        string json = await response.Content.ReadAsStringAsync();
+        //Дессиарелизацйия респонсса
+        CreatedUserResponseDTO createdUserResponseDto = JsonSerializer.Deserialize<CreatedUserResponseDTO>(json);
+    }   
+    
+    [Test]
+    public async Task Test4()
+    {
+        // создаю ДТО
+        var userPayload = new CreateUserRequestDTO
+        {
+            Name = "Alex",
+            Job = "Zoo2",
+        };
+        //Отправляю запрос
+        using HttpResponseMessage response = await client.PutAsJsonAsync("users/2", userPayload);
+        //Проверяю успешность ответа
+        response.EnsureSuccessStatusCode();
+        //Вытаскиваю контент из респонса
+        string json = await response.Content.ReadAsStringAsync();
+        
+    }   
+    
+    [Test]
+    public async Task Test5()
+    {
+        // создаю ДТО
+        var userPayload = new CreateUserRequestDTO
+        {
+            Name = "Alex",
+            Job = "Zoo2",
+        };
+        //Отправляю запрос
+        using HttpResponseMessage response = await client.DeleteAsync("users/2");
+        //Проверяю успешность ответа
+        response.EnsureSuccessStatusCode();
+    }   
+    
     [OneTimeTearDown]
     public void TearDown()
     {
         client.Dispose();
     }
 }
-// free_user_3IMkASnOWZzNwN8EVQkJPchdUZQ
+//токен free_user_3IMkASnOWZzNwN8EVQkJPchdUZQ

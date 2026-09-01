@@ -7,4 +7,7 @@ public interface IUserApiClient
 {
     [Get ("/users/{id}")]
     Task<UserResponseDTO> GetUserAsync(int id);
+    
+    [Post("/users")]
+    Task<CreateUserRequestDTO> PostUserAsync([Body] CreateUserRequestDTO user);
 }

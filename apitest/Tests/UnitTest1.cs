@@ -48,11 +48,7 @@ public class Tests
     public async Task Test3()
     {
         // создаю ДТО
-        var userPayload = new CreateUserRequestDTO
-        {
-            Name = "Alex",
-            Job = "Zoo",
-        };
+        var userPayload = new CreateUserRequestDTO("Alex", "Zoo");
         //Отправляю запрос
         using HttpResponseMessage response = await client.PostAsJsonAsync("users", userPayload);
        //Проверяю успешность ответа
@@ -67,11 +63,7 @@ public class Tests
     public async Task Test4()
     {
         // создаю ДТО
-        var userPayload = new CreateUserRequestDTO
-        {
-            Name = "Alex",
-            Job = "Zoo2",
-        };
+        var userPayload = new CreateUserRequestDTO("Alex", "Zoo2");
         //Отправляю запрос
         using HttpResponseMessage response = await client.PutAsJsonAsync("users/2", userPayload);
         //Проверяю успешность ответа
@@ -85,11 +77,7 @@ public class Tests
     public async Task Test5()
     {
         // создаю ДТО
-        var userPayload = new CreateUserRequestDTO
-        {
-            Name = "Alex",
-            Job = "Zoo2",
-        };
+        var userPayload = new CreateUserRequestDTO("Alex", "Zoo");
         //Отправляю запрос
         using HttpResponseMessage response = await client.DeleteAsync("users/2");
         //Проверяю успешность ответа

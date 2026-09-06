@@ -22,4 +22,15 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Resources\" />
+      <Folder Include="Rsouces\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Resources\OrderData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

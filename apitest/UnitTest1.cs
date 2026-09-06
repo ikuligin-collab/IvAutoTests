@@ -15,7 +15,7 @@ public class Tests
     {
         client = new HttpClient()
         {
-            BaseAddress = new Uri("https://reqres.in/api/")
+            BaseAddress = new Uri("https://reqres.in/api")
         };
         client.DefaultRequestHeaders.Add("x-api-key", "free_user_3IMkASnOWZzNwN8EVQkJPchdUZQ");
     }

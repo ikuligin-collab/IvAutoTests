@@ -17,7 +17,7 @@ public class RefitTests
        services.AddRefitClient<IUserApiClient>()
            .ConfigureHttpClient(c =>
            {
-               c.BaseAddress = new Uri("http://reqres.in/api/");
+               c.BaseAddress = new Uri("http://reqres.in/api");
            });
        var provider = services.BuildServiceProvider();
        _client = provider.GetRequiredService<IUserApiClient>();

@@ -1,6 +1,8 @@
 ﻿using apitest.DTO.FilesDTO;
 using FluentAssertions;
 using System.Text.Json;
+using FluentAssertions.Execution;
+
 
 namespace apitest;
 
@@ -43,5 +45,39 @@ public class OrderTests
             TestContext.WriteLine($"Электроника: {item.Name} ");
         }
         electronicsItems.Should().OnlyContain(x=>x.Category=="Electronics");
+    }
+
+    [Test]
+    public void Test4()
+    {
+        order.Payment.Status.Should().Be("paid");
+    }
+
+    [Test]
+    public void Test5()
+    {
+        var mostExpensiveItem = order.Items.OrderByDescending(x=>x.Price).First();
+       /* using (new AssertionScope())
+        {
+            mostExpensiveItem.Price.Should().Be(129.99m);
+            mostExpensiveItem.Name.Should().Be("Wireless Headphones"); 
+        }*/
+       //mostExpensiveItem.Price.Should().Be(129.99m).And. mostExpensiveItem.Name.Should().Be("Wireless Headphones");
+      //Проверка нескольких полей через анонимные типы
+       mostExpensiveItem.Should().BeEquivalentTo(new
+       {
+            Price = 129.99,
+            Name = "Wireless Headphones"
+       });
+    }
+    [Test]
+    public void Test6()
+    {
+        var listofItems = order.Items.Where(x=>x.Price > 50).ToList();
+        foreach (var item in listofItems)
+        {
+            TestContext.WriteLine($"{item.ProductId} | {item.Quantity} | {item.Price}");   
+        }
+        listofItems.Should().NotBeEmpty();
     }
 }

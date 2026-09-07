@@ -27,4 +27,18 @@ public class UserDataJsonTests
     {
         user.UserDto.First().Profile.FullName.Should().Be("Alice Johnson");
     }
+
+    [Test]
+    public void Test23()
+    {
+        var ids = user.UserDto.Select(u => u.Id);
+        ids.Should().OnlyHaveUniqueItems();
+    }
+
+    [Test]
+    public void Test24()
+    {
+        var hasPremium = user.UserDto.Any(x=>x.Profile.Tags.Contains("premium"));
+        hasPremium.Should().BeTrue();
+    }
 }

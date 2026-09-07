@@ -2,7 +2,7 @@
 
 namespace apitest.DTO.FilesDTO;
 
-public class AddressDTO(
+public record AddressDTO(
     [property: JsonPropertyName("country")]
     string Country,
     [property:JsonPropertyName("city")]

@@ -2,7 +2,7 @@
 
 namespace apitest.DTO.FilesDTO;
 
-public class PaymentDTO(
+public record PaymentDTO(
     [property: JsonPropertyName("method")]
     string Method,
     [property:JsonPropertyName("status")]

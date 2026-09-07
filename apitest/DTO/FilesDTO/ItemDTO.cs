@@ -2,7 +2,7 @@
 
 namespace apitest.DTO.FilesDTO;
 
-public class ItemDTO(
+public record ItemDTO(
     [property: JsonPropertyName("productId")]
     int ProductId,
     [property:JsonPropertyName("name")]

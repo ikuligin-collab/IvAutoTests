@@ -2,7 +2,7 @@
 
 namespace apitest.DTO.FilesDTO;
 
-public class DeliverytDTO(
+public record DeliverytDTO(
     [property: JsonPropertyName("type")]
     string Type,
     [property:JsonPropertyName("status")]

@@ -12,5 +12,5 @@ public record CustomerDTO(
     [property:JsonPropertyName("phone")]
     string Phone,
     [property:JsonPropertyName("address")]
-    string Address
+    AddressDTO Address
 );

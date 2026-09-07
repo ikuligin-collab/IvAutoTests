@@ -2,7 +2,7 @@
 
 namespace apitest.DTO.FilesDTO;
 
-public class SummaryDTO(
+public record SummaryDTO(
     [property: JsonPropertyName("itemsTotal")]
     decimal ItemsTotal,
     [property:JsonPropertyName("deliveryFee")]

@@ -55,4 +55,19 @@ public class UserDataJsonTests
         var stockholmec = user.UserDto.Any(u => u.Profile.Address.City == "Stockholm");
         stockholmec.Should().BeTrue();
     }
+
+    [Test]
+    public void Test27()
+    { 
+        user.UserDto.Should().AllSatisfy(u => 
+            u.Profile.Age.Should().BeInRange(18, 60));
+        
+    }
+
+    [Test]
+    public void Test28()
+    { 
+        var hasAdmin = user.UserDto.Any(u => u.Roles.Contains("admin"));
+        hasAdmin.Should().BeTrue();
+    }
 }

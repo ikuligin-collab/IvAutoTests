@@ -41,4 +41,18 @@ public class UserDataJsonTests
         var hasPremium = user.UserDto.Any(x=>x.Profile.Tags.Contains("premium"));
         hasPremium.Should().BeTrue();
     }
+
+    [Test]
+    public void Test25()
+    {
+        var HaveCity = user.UserDto.All(u => !string.IsNullOrWhiteSpace(u.Profile.Address.City));
+        HaveCity.Should().BeTrue();
+    }
+
+    [Test]
+    public void Test26()
+    {
+        var stockholmec = user.UserDto.Any(u => u.Profile.Address.City == "Stockholm");
+        stockholmec.Should().BeTrue();
+    }
 }

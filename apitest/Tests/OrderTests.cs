@@ -3,7 +3,6 @@ using FluentAssertions;
 using System.Text.Json;
 using FluentAssertions.Execution;
 
-
 namespace apitest;
 
 public class OrderTests

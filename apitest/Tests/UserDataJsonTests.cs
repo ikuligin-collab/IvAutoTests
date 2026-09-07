@@ -19,7 +19,12 @@ public class UserDataJsonTests
     [Test]
     public void Test21()
     {
-      user.UserDto.Should().HaveCount(10);
+      user.UserDto.Count().Should().Be(10);
     }
-   
+
+    [Test]
+    public void Test22()
+    {
+        user.UserDto.First().Profile.FullName.Should().Be("Alice Johnson");
+    }
 }

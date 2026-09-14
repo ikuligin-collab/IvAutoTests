@@ -60,4 +60,12 @@ public class DapperTest
         var address = await repo2.GetAddressesByUserIdAsync(user.Id);
         address.City.Should().Be("Казань");
     }
+
+    [Test]
+    public async Task GetAllCategories()
+    {
+        var repo = p.Provider.GetRequiredService<ICategoriesRepository>();
+        var cat = await repo.GetAllCategoriesAsync();
+        cat.Should().HaveCount(6);
+    }
 }

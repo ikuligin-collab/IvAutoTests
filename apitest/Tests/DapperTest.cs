@@ -1,5 +1,6 @@
 ﻿using apitest.Interfaces.DapperInterface;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -67,5 +68,20 @@ public class DapperTest
         var repo = p.Provider.GetRequiredService<ICategoriesRepository>();
         var cat = await repo.GetAllCategoriesAsync();
         cat.Should().HaveCount(6);
+    }
+
+    [Test]
+    public async Task GetProduct()
+    {
+        var repo = p.Provider.GetRequiredService<IProductsRepository>();
+        var product = await repo.GetProductByIdAsync(2);
+        using (new AssertionScope())
+        {
+            product.Name.Should().Be("Samsung Galaxy S24");
+            product.Description.Should().Be("Флагманский смартфон Samsung");
+            product.Price.Should().Be(69990);
+            product.Stock.Should().Be(20);
+            product.CategoryId.Should().Be(1);  
+        }
     }
 }

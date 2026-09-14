@@ -52,7 +52,7 @@ public class DapperTest
     }
 
     [Test]
-    public async Task GetUserByFirstAndLastName()
+    public async Task GetAddressByFirstAndLastName()
     {
         var repo1 = p.Provider.GetRequiredService<IUserRepository>();
         var user = await repo1.GetUserByFirstAndLastName("Елена", "Кузнецова");

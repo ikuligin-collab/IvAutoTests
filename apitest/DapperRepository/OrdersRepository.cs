@@ -21,10 +21,13 @@ public class OrdersRepository: IOrdersRepository
         return orders;
     }
 
-    public async Task<OrdersDTO> GetOrderById(int id)
+    public async Task<OrdersDTO> GetOrderByUserIdAsync(int userId)
     {
         using var db = new SqliteConnection(connectionString);
-        var order = await db.QueryFirstOrDefaultAsync<OrdersDTO>("SELECT * FROM Orders WHERE Id = @id", new { id });
+        var order = await db.QueryFirstOrDefaultAsync<OrdersDTO>(
+            "SELECT * FROM Orders WHERE UserId = @User_id", 
+            new { User_id = userId }
+        );
         return order;
     }
 }

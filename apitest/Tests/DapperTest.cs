@@ -84,4 +84,19 @@ public class DapperTest
             product.CategoryId.Should().Be(1);  
         }
     }
+    
+    [Test]
+    public async Task GetOrderByUserId()
+    {
+        var order = p.Provider.GetRequiredService<IOrdersRepository>();
+        var userOdred = await order.GetOrderByUserIdAsync(2); // получил объект заказа конкретного юзера 
+        userOdred.Should().NotBeNull(); // проверяю, что достал объект
+        var orderItem = p.Provider.GetRequiredService<IOrderItemsRepository>();
+        var userOdredItem = await orderItem.GetOrderItemById(userOdred.Id); //получил объект конкретного заказа
+        userOdredItem.Should().NotBeNull();// проверяю, что достал объект конкретного заказа
+        var products = p.Provider.GetRequiredService<IProductsRepository>();
+        var userProduct = await products.GetProductByIdAsync(userOdredItem.Id); //получил объект продукта
+        userProduct.Name.Should().Be("Samsung Galaxy S24");
+        
+    }
 }

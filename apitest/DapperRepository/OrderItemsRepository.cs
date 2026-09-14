@@ -17,14 +17,14 @@ public class OrderItemsRepository: IOrderItemsRepository
     public async Task<IEnumerable<OrderItemsDTO>> GetAllOrderItemsAsync()
     {
         using var db = new SqliteConnection(connectionString);
-        var orderItems = await db.QueryAsync<OrderItemsDTO>("SELECT * FROM OrdersItems");
+        var orderItems = await db.QueryAsync<OrderItemsDTO>("SELECT * FROM OrderItems");
         return orderItems;
     }
 
-    public async Task<OrderItemsDTO> GetOrderItemsById(int id)
+    public async Task<OrderItemsDTO> GetOrderItemById(int id)
     {
         using var db = new SqliteConnection(connectionString);
-        var orderItem = await db.QueryFirstOrDefaultAsync<OrderItemsDTO>("SELECT * FROM OrdersItems WHERE Id = @id", new { id });
+        var orderItem = await db.QueryFirstOrDefaultAsync<OrderItemsDTO>("SELECT * FROM OrderItems WHERE Id = @id", new { id });
         return orderItem;
     }
 }

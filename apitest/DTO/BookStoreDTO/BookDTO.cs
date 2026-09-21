@@ -2,8 +2,8 @@
 
 public class BookDTO
 {
-    public string isbn { get; set; }
+    public string Isbn { get; set; }
 
-    public string title { get; set; }
+    public string Title { get; set; }
     
 }

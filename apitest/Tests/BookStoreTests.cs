@@ -62,7 +62,7 @@ public class BookStoreTests
         var userId = await GetUserIdAsync();
         var newBook = new AddBookRequestDTO
         {
-            UserId = userId, CollectionOfIsbns = new List<BookDTO> { new BookDTO { isbn = "9781449325862" } }
+            UserId = userId, CollectionOfIsbns = new List<BookDTO> { new BookDTO { Isbn = "9781449325862" } }
         };
 
         var addResonse = await api.AddBookAsync(newBook, token);
@@ -84,10 +84,9 @@ public class BookStoreTests
     {
         var getAllBooks = await api.GetAllBooks();
         var rndBook = RandomHelper.GetRandomItem(getAllBooks.Books);
-        var bookById = rndBook.isbn;
+        var bookById = rndBook.Isbn;
         var oneBook = await api.GetBookByIsbnAsync(bookById);
-        oneBook.title.Should().Be(rndBook.title);
-        
+        oneBook.Title.Should().Be(rndBook.Title);
     }
     private async Task<string> GetTokenAsync()
     {

@@ -21,6 +21,6 @@ public interface IBookStore
     [Get("/BookStore/v1/Books")]
     Task<BooksListDto> GetAllBooks();
     
-    [Get ("/BookStore/v1/Book}")]
+    [Get("/BookStore/v1/Book")]
     Task<BookDTO> GetBookByIsbnAsync([Query] string ISBN);
 }

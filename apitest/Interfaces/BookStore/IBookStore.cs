@@ -23,4 +23,11 @@ public interface IBookStore
     
     [Get("/BookStore/v1/Book")]
     Task<BookDTO> GetBookByIsbnAsync([Query] string ISBN);
+    
+    [Delete("/BookStore/v1/Book")]
+    Task <DeleteBookResponseDTo> DeleteBookByIsbnAsync ([Body] DeleteBookRequestDTO book,
+        [Header("Authorization")] string token);
+    
+    [Get ("/Account/v1/User/{UUID}")]
+    Task <AddBookResponseDTO> GetBooksByUserIdAsync(string UUID,[Header("Autorization")] string token);
 }

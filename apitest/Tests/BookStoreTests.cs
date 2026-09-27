@@ -66,8 +66,7 @@ public class BookStoreTests
         };
 
         var addResonse = await api.AddBookAsync(newBook, token);
-        addResonse.Isbn.Should().Be("978144932586");
-
+        addResonse.Books.Should().HaveCount(1);
     }
 
     [Test]
@@ -88,11 +87,72 @@ public class BookStoreTests
         var oneBook = await api.GetBookByIsbnAsync(bookById);
         oneBook.Title.Should().Be(rndBook.Title);
     }
+    
+    [Test]
+
+    public async Task AddMultipleBookAsync()
+    {
+        var token =await GetTokenAsync();
+        var userId = await GetUserIdAsync();
+        var newBook = new AddBookRequestDTO
+        {
+            UserId = userId, CollectionOfIsbns = new List<BookDTO> { new BookDTO { Isbn = "9781449325862" }, new BookDTO { Isbn = "9781449331818" }}
+        };
+
+        var addResonse = await api.AddBookAsync(newBook, token);
+        addResonse.Books.Should().HaveCount(2);
+
+    }
+
+    [Test]
+    public async Task AddBookWOTokenAsync()
+    {
+        var userId = await GetUserIdAsync();
+        var newBook = new AddBookRequestDTO
+        {
+            UserId = userId, CollectionOfIsbns = new List<BookDTO> { new BookDTO { Isbn = "9781449325862" }, new BookDTO { Isbn = "9781449331818" }}
+        };
+        Func<Task> action = async () =>
+            await api.AddBookAsync(newBook, token: null);
+        await action.Should().ThrowAsync<ApiException>().Where (e => e.StatusCode == System.Net.HttpStatusCode.Unauthorized);
+    }
+    
+    [Test]
+    public async Task AddBookWrongIsbnAsync()
+    {
+        var token =await GetTokenAsync();
+        var userId = await GetUserIdAsync();
+        var newBook = new AddBookRequestDTO
+        {
+            UserId = userId, CollectionOfIsbns = new List<BookDTO> 
+                { new BookDTO { Isbn = "invalid" }, new BookDTO { Isbn = "9781449331818" }}
+        };
+        Func<Task> action = async () =>
+            await api.AddBookAsync(newBook, token);
+        await action.Should().ThrowAsync<ApiException>().Where (e => e.StatusCode == System.Net.HttpStatusCode.BadRequest);
+    }
+
+    [Test]
+    public async Task DeleteBookByIsbnAsync()
+    {
+        var token =await GetTokenAsync();
+        var userId = await GetUserIdAsync();
+        var userInfo = await api.GetBooksByUserIdAsync (userId, token);
+        foreach (var book in userInfo.Books)
+        {
+            var b = new DeleteBookRequestDTO{Isbn=book.Isbn, UserId = userId};
+            await api.DeleteBookByIsbnAsync(b, token);
+        }
+        var updateduserInfo = await api.GetBooksByUserIdAsync (userId, token);
+        updateduserInfo.Books.Should().HaveCount(0);
+    }
+    
+    //Вспомогательные методы
     private async Task<string> GetTokenAsync()
     {
         var user = new CreateUserBookStoreDTO() {UserName = "Ivan1", Password = "StrongPass123!"};
         var getToken = await api.GenerateTokenAsync(user);
-        var token = $"Bearer{getToken.Token}";
+        var token = getToken.Token;
         return token;
     }
 
@@ -103,5 +163,7 @@ public class BookStoreTests
         var userId = response.UserId;
         return userId;
     }
+    
+    
     
 }

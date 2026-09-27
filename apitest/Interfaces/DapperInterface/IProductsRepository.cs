@@ -6,4 +6,5 @@ public interface IProductsRepository
 {
     Task<IEnumerable<ProductsDTO>> GetAllProductsAsync();
     Task<ProductsDTO> GetProductByIdAsync(int id);
+    Task<IEnumerable<ProductsDTO>> GetProductByCategoryIDAsync(int categoryId);
 }

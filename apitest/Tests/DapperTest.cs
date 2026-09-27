@@ -99,4 +99,48 @@ public class DapperTest
         userProduct.Name.Should().Be("Samsung Galaxy S24");
         
     }
+    
+    [Test]
+    public async Task AccessoriesByUsersFromDifferentCities()
+    {
+        //Достаю категорию "Аксессуары" c Id = 6
+        var category = await p.Provider.GetRequiredService<ICategoriesRepository>().GetCategoriesByIdAsync(6);
+        category.Should().NotBeNull();
+
+        //Достаю ID всех товаров из этой категории
+        var categoryProducts = await p.Provider.GetRequiredService<IProductsRepository>().GetProductByCategoryIDAsync(category.Id);
+        var accessoryIds = categoryProducts.Select(p => p.Id).ToHashSet();
+
+        //Достаю все заказы и позицию товаров в заказах
+        var orders = await p.Provider.GetRequiredService<IOrdersRepository>().GetAllOrdersAsync();
+        var orderItems = await p.Provider.GetRequiredService<IOrderItemsRepository>().GetAllOrderItemsAsync();
+
+        //Фильтрую ID заказов, в которых есть аксессуары
+        var accessoryOrderIds = orderItems
+            .Where(item => accessoryIds.Contains(item.ProductId))
+            .Select(item => item.OrderId)
+            .ToHashSet();
+
+        //Собираю уникальные ID пользователей из этих заказов
+        var userIds = orders
+            .Where(order => accessoryOrderIds.Contains(order.Id))
+            .Select(order => order.UserId)
+            .Distinct();
+
+        //Достаю города этих пользователей
+        var addressesRepo = p.Provider.GetRequiredService<IAddressRepository>();
+        var cities = new HashSet<string>();
+
+        foreach (var userId in userIds)
+        {
+            var address = await addressesRepo.GetAddressesByUserIdAsync(userId);
+            if (address != null)
+            {
+                cities.Add(address.City);
+            }
+        }
+
+        //Проверка: городов больше одного
+        cities.Count.Should().BeGreaterThan(1);
+    }
 }

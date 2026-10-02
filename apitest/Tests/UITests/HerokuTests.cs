@@ -37,4 +37,10 @@ public class HerokuTests:BaseTest
       var textErrorMessage = await errorMessage2.InnerTextAsync(); // возвращает текст всего контейнера, даже с крестиком закрытия
       textErrorMessage.Should().Contain("Your username is invalid!"); // использщовал миенно контейн, название соджержит не только текст 
     }
+
+    [Test]
+    public async Task TestDropdown()
+    {
+        await Page.GotoAsync("https://the-internet.herokuapp.com/dropdown");
+    }
 }

@@ -1,41 +1,28 @@
-﻿using Microsoft.Playwright;
+﻿using apitest.ForUI.Pages;
+using Microsoft.Playwright;
 using FluentAssertions;
 
 namespace apitest.UITests;
 
-public class HerokuTests:BaseTest
+public class HerokuTests : BaseTest
 {
     [Test]
     public async Task CheckBoxtest()
     {
         await Page.GotoAsync("https://the-internet.herokuapp.com/checkboxes");
-            var first = Page.Locator("input[type='checkbox']").Nth(0);
-            await first.ClickAsync();
-            (await first.IsCheckedAsync()).Should().BeTrue();
-
+        var first = Page.Locator("input[type='checkbox']").Nth(0);
+        await first.ClickAsync();
+        (await first.IsCheckedAsync()).Should().BeTrue();
     }
 
     [Test]
     public async Task FormAuthentification()
     {
-      await Page.GotoAsync("https://the-internet.herokuapp.com/login");  
-      //var loginElement = Page.Locator("//input[@id='username']"); // ищем эдемент по хпасу
-      var loginElement = Page.GetByRole(AriaRole.Textbox, new() { Name = "Username" });
-      await loginElement.FillAsync("wrong");
-      var passwordElement = Page.GetByRole(AriaRole.Textbox, new() { Name = "Password" });
-      await passwordElement.FillAsync("wrong");
-      //var loginButton = await Page.QuerySelectorAsync("button[type='submit']");
-      var loginButton = Page.GetByRole(AriaRole.Button, new() { Name = "Login" });
-      await loginButton.ClickAsync();
-      //проверим наличие errorMessage способ 1
-      var errorMessage = Page.Locator("//div[contains(text(), 'Your username is invalid!')]");
-      var state = await errorMessage.IsVisibleAsync();
-      state.Should().BeTrue();
-      //проверим наличие errorMessage способ 2
-      //var errorMessage2 = await Page.QuerySelectorAsync("#flash");
-      var errorMessage2 = Page.GetByText("Your username is invalid!");
-      var textErrorMessage = await errorMessage2.InnerTextAsync(); // возвращает текст всего контейнера, даже с крестиком закрытия
-      textErrorMessage.Should().Contain("Your username is invalid!"); // использщовал миенно контейн, название соджержит не только текст 
+        LoginPage loginPage = new LoginPage(Page);
+        await loginPage.OpenLoginPageAsync();
+        loginPage.LoginUserAsync("wrong", "wrong");
+        var errorMessage = await loginPage.GetTextFromErrorMessageAsync();
+        errorMessage.Should().Contain("Your username is invalid");
     }
 
     [Test]
@@ -46,7 +33,7 @@ public class HerokuTests:BaseTest
         await Assertions.Expect(Page).ToHaveURLAsync("https://the-internet.herokuapp.com/dropdown");
         var dropdown = Page.Locator("#dropdown");
         await Assertions.Expect(dropdown).ToBeVisibleAsync();
-        
+
         await dropdown.SelectOptionAsync("1"); // значение атрибута
         //#1
         await Assertions.Expect(dropdown).ToHaveValueAsync("1");
@@ -62,8 +49,8 @@ public class HerokuTests:BaseTest
         var opt1 = Page.Locator("//option[@selected='selected']");
         var textOpt1 = await opt1.InnerTextAsync();
         textOpt1.Should().Be("Option 1");
-        
-       //select option 2
+
+        //select option 2
         await dropdown.SelectOptionAsync("2"); // значение атрибута
         await Assertions.Expect(dropdown).ToHaveValueAsync("1");
         //запонить для стандартного дробдауна
@@ -75,13 +62,54 @@ public class HerokuTests:BaseTest
         var opt2 = Page.Locator("//option[@selected='selected']");
         var textOpt2 = await opt2.InnerTextAsync();
         textOpt2.Should().Be("Option 2");
-        
+
         //ннестандартный дробдаун
         await dropdown.ClickAsync();
         var option2 = Page.Locator("//option[text()='Option 2']");
         await option2.ClickAsync();
         var textFromDropdown = await dropdown.InnerTextAsync();
         textFromDropdown.Should().Be("Option 2");
-        
+    }
+
+    [Test]
+    //нестандартный дробдаун
+    public async Task Should_Select_Sub_Items()
+    {
+        await Page.GotoAsync("https://demoqa.com/select-menu");
+        var dropdown = Page.Locator("#withOptGroup");
+        await dropdown.ClickAsync();
+
+        var option = Page.GetByText("Group 1, option 1");
+        await option.ClickAsync();
+
+        var text = await dropdown.TextContentAsync();
+        await Assertions.Expect(dropdown).ToContainTextAsync("Group 1, option 1");
+    }
+
+    [Test]
+    public async Task AddRemoveElements()
+    {
+       AddRemovePage addRemovePage = new AddRemovePage(Page);
+        // Открываем страницу
+       await addRemovePage.OpenAddRemovePage();
+       await addRemovePage.CheckPageOpenAsync();
+       
+        // --- ДЕЙСТВИЕ 1: добавить первую кнопку ---
+        await addRemovePage.ClickButtonByNameAsync("Add Element");
+
+        // Проверка: появилась 1 кнопка Delete
+        await addRemovePage.CheckNumberOfButtonAsync("Delete", 1);
+
+        // --- ДЕЙСТВИЕ 2: добавить вторую кнопку ---
+        await addRemovePage.ClickButtonByNameAsync("Add Element");
+
+        // Проверка: теперь их 2 
+        await addRemovePage.CheckNumberOfButtonAsync("Delete", 2);
+
+        // --- ДЕЙСТВИЕ 3: удалить одну кнопку ---
+        await addRemovePage.ClickButtonByNameAndIndexAsync("Delete", 2);
+
+        // Проверка: осталась 1 кнопка
+        await addRemovePage.CheckNumberOfButtonAsync("Delete", 1);
     }
 }

@@ -27,6 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="ForUI\Pages\SauseDemo\" />
       <Folder Include="Rsouces\" />
     </ItemGroup>
 

@@ -42,5 +42,46 @@ public class HerokuTests:BaseTest
     public async Task TestDropdown()
     {
         await Page.GotoAsync("https://the-internet.herokuapp.com/dropdown");
+        await Assertions.Expect(Page).ToHaveTitleAsync("The Internet");
+        await Assertions.Expect(Page).ToHaveURLAsync("https://the-internet.herokuapp.com/dropdown");
+        var dropdown = Page.Locator("#dropdown");
+        await Assertions.Expect(dropdown).ToBeVisibleAsync();
+        
+        await dropdown.SelectOptionAsync("1"); // значение атрибута
+        //#1
+        await Assertions.Expect(dropdown).ToHaveValueAsync("1");
+        //запонить для стандартного дробдауна
+        //#2
+        var selested = dropdown.Locator("option:checked");
+        await Assertions.Expect(selested).ToHaveTextAsync("Option 1");
+        //универслаьная проверка
+        //#3
+        var text = await dropdown.InnerTextAsync();
+        text.Should().Contain("Option 1");
+        //#4
+        var opt1 = Page.Locator("//option[@selected='selected']");
+        var textOpt1 = await opt1.InnerTextAsync();
+        textOpt1.Should().Be("Option 1");
+        
+       //select option 2
+        await dropdown.SelectOptionAsync("2"); // значение атрибута
+        await Assertions.Expect(dropdown).ToHaveValueAsync("1");
+        //запонить для стандартного дробдауна
+        //var selested1 = dropdown.Locator("option:checked");
+        await Assertions.Expect(selested).ToHaveTextAsync("Option 1");
+        //универслаьная проверка
+        var text2 = await dropdown.InnerTextAsync();
+        text2.Should().Contain("Option 2");
+        var opt2 = Page.Locator("//option[@selected='selected']");
+        var textOpt2 = await opt2.InnerTextAsync();
+        textOpt2.Should().Be("Option 2");
+        
+        //ннестандартный дробдаун
+        await dropdown.ClickAsync();
+        var option2 = Page.Locator("//option[text()='Option 2']");
+        await option2.ClickAsync();
+        var textFromDropdown = await dropdown.InnerTextAsync();
+        textFromDropdown.Should().Be("Option 2");
+        
     }
 }

@@ -50,11 +50,13 @@ public class SaucedemoTest : BaseTest
         
         CartPage cartPage = new CartPage(Page); // страница с покупками
         
-        var cart1 =cartPage.GetCartItemByName("Sauce Labs Fleece Jacket");//ищу куртку
-        await Assertions.Expect(cart1).ToBeVisibleAsync();//проверяю, что куртка есть в списке заказов
-        
-        var cart2 =cartPage.GetCartItemByName("Sauce Labs Backpack");//ищу рюкзак
-        await Assertions.Expect(cart2).ToBeVisibleAsync();//проверяю, что рюкзак есть в списке заказов
+        // Проверяю наличие куртки
+        bool isJacketVisible = await cartPage.IsProductInCartAsync("Sauce Labs Fleece Jacket");
+        Assert.That(isJacketVisible, Is.True, "Куртка не найдена в корзине");
+
+        // Проверяю наличие рюкзака
+        bool isBackpackVisible = await cartPage.IsProductInCartAsync("Sauce Labs Backpack");
+        Assert.That(isBackpackVisible, Is.True, "Рюкзак не найден в корзине");
         
         await  cartPage.ClickCheckoutAsync();
         await Assertions.Expect(Page).ToHaveURLAsync("https://www.saucedemo.com/checkout-step-one.html");// проверяю, что открылась станица чекаута

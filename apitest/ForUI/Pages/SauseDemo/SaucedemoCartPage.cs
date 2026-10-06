@@ -8,17 +8,19 @@ public class CartPage
 
     // Локатор кнопки Checkout
     private ILocator CheckoutButton => Page.GetByRole(AriaRole.Button, new() { Name = "Checkout" });
-
+    // локатор товара в корзине
+    private ILocator GetCartItem(string productName) =>
+        Page.Locator(".cart_item").Filter(new() { HasText = productName });
+    
     public CartPage(IPage page)
     {
         Page = page;
     }
     
-    /// Возвращает локатор контейнера товара в корзине по его названию
-    public ILocator GetCartItemByName(string productName)
+    /// Проверяет, что найденный элемент видимый
+    public async Task<bool> IsProductInCartAsync(string productName)
     {
-        return Page.Locator(".cart_item")
-            .Filter(new() { HasText = productName });
+        return await GetCartItem(productName).IsVisibleAsync();
     }
     
     /// клик по кнопке Checkout

@@ -68,10 +68,14 @@ public class SaucedemoTest : BaseTest
         await Assertions.Expect(Page).ToHaveURLAsync("https://www.saucedemo.com/checkout-step-two.html");
         
         CheckoutPage2 checkoutPage2 = new CheckoutPage2(Page);
-        var Item1 = checkoutPage2.GetItemByName("Sauce Labs Fleece Jacket");
-        await Assertions.Expect(Item1).ToBeVisibleAsync();
-        var Item2 = checkoutPage2.GetItemByName("Sauce Labs Backpack");
-        await Assertions.Expect(Item2).ToBeVisibleAsync();
+        // Проверяю наличие куртки
+        bool hasJacketVisible = await checkoutPage2.IsProductInChecoutPageAsync("Sauce Labs Fleece Jacket");
+        Assert.That(isJacketVisible, Is.True, "Куртка не найдена на странице чекаута");
+
+        // Проверяю наличие рюкзака
+        bool hasBackpackVisible = await checkoutPage2.IsProductInChecoutPageAsync("Sauce Labs Backpack");
+        Assert.That(isBackpackVisible, Is.True, "Рюкзак не найден на странице чекаута");
+       
         await checkoutPage2.ClickFinishAsync();
         
         await Assertions.Expect(Page).ToHaveURLAsync("https://www.saucedemo.com/checkout-complete.html");

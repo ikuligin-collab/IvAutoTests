@@ -75,9 +75,8 @@ public class SaucedemoTest : BaseTest
         await Assertions.Expect(Page).ToHaveURLAsync("https://www.saucedemo.com/checkout-complete.html");
         
         CheckoutCompletePage checkoutCompletePage = new CheckoutCompletePage(Page);
-        var sucsess = checkoutCompletePage.GetCompleteHeader();
-        await Assertions.Expect(sucsess).ToBeVisibleAsync();
-
+        string actualText = await checkoutCompletePage.GetHeaderTextAsync(); //получаю текст хедера
+        Assert.That(actualText, Is.EqualTo("Thank you for your order!"));//сравниваю полученный текст хедера с ОР
 
     }
 }

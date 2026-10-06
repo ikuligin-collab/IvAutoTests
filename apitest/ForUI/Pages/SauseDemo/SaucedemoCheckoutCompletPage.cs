@@ -6,13 +6,14 @@ public class CheckoutCompletePage
 {
     private readonly IPage Page;
 
+    private ILocator Header => Page.GetByRole(AriaRole.Heading);
     public CheckoutCompletePage(IPage page)
     {
         Page = page;
     }
     
-    public ILocator GetCompleteHeader()
+    public async Task<string> GetHeaderTextAsync() // метод возвращает текст заголовка
     {
-        return Page.GetByRole(AriaRole.Heading, new() { Name = "Thank you for your order!" });
+        return await Header.TextContentAsync() ?? string.Empty;
     }
 }

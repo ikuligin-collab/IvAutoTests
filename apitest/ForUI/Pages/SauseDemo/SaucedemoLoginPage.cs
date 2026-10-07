@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using static Microsoft.Playwright.Assertions;
 
 namespace apitest.ForUI.Pages.SauseDemo;
 
@@ -8,6 +9,7 @@ public class SaucedemoLoginPage
     private ILocator UserNameTextBox => Page.GetByPlaceholder("Username");
     private ILocator PassTextBox => Page.GetByPlaceholder("Password");
     private ILocator LoginButton => Page.GetByRole(AriaRole.Button, new() { Name = "Login" });
+    private ILocator LoginHeder => Page.Locator(".login_logo");
 
 
     public SaucedemoLoginPage(IPage page)
@@ -27,4 +29,9 @@ public class SaucedemoLoginPage
         await LoginButton.ClickAsync();
     }
 
+    public async Task VerifyTitleLoginPageAsync(string expectedTitle)
+    {
+        await Expect(LoginHeder).ToHaveTextAsync(expectedTitle);
+        await Expect(LoginHeder).ToBeVisibleAsync();
+    }
 }

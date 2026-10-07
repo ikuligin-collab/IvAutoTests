@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using static Microsoft.Playwright.Assertions;
 
 namespace apitest.ForUI.Pages.SauseDemo;
 
@@ -11,23 +12,23 @@ public class InventoryPage
         Page.Locator(".inventory_item").Filter(new() { HasText = productName }); //локатор всей карточки товара
     private ILocator AddToCartButton(string productName) =>
         GetProductContainer(productName).GetByRole(AriaRole.Button, new() { Name = "Add to cart" });//локатор кнопки "Add to cart" у конкретного товара
-    private ILocator HeaderLogo => Page.Locator(".app_logo"); //локатор логотипа
+    private ILocator InventoryHeader => Page.Locator("[data-test='title']"); //локатор хедера
 
     public InventoryPage(IPage page)
     {
         Page = page;
     }
 
-    //Нажатие кнопки у товара
+    //Нажатие кнопки "Add to cart" у товара
     public async Task AddToCartByNameAsync(string productName)
     {
         await AddToCartButton(productName).ClickAsync();
     }
     
     //Проверка отображения товара на странице
-    public async Task<bool> IsProductVisibleAsync(string productName)
+    public async Task VerifyProductIsVisibleAsync(string productName)
     {
-        return await GetProductContainer(productName).IsVisibleAsync();
+        await Expect(GetProductContainer(productName)).ToBeVisibleAsync();
     }
     
     //клик по корзине
@@ -36,8 +37,10 @@ public class InventoryPage
         await CartButton.ClickAsync();
     }
     
-    public async Task<string> GetHeaderTitleTextAsync()//возврат текста заголовка
+    //проверка названия хедера
+    public async Task VerifyTitleInventoryAsync(string expectedTitle)
     {
-        return await HeaderLogo.TextContentAsync() ?? string.Empty;
+        await Expect(InventoryHeader).ToHaveTextAsync(expectedTitle);
+        await Expect(InventoryHeader).ToBeVisibleAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using static Microsoft.Playwright.Assertions;
 
 namespace apitest.ForUI.Pages.SauseDemo;
 
@@ -6,14 +7,17 @@ public class CheckoutCompletePage
 {
     private readonly IPage Page;
 
-    private ILocator Header => Page.GetByRole(AriaRole.Heading);
+    private ILocator HeadeCompletePager => Page.GetByRole(AriaRole.Heading);
+
     public CheckoutCompletePage(IPage page)
     {
         Page = page;
     }
-    
-    public async Task<string> GetHeaderTextAsync() // метод возвращает текст заголовка
+
+    //проверка названия хедера
+    public async Task VerifyTitleCheckoutAsync(string expectedTitle)
     {
-        return await Header.TextContentAsync() ?? string.Empty;
+        await Expect(HeadeCompletePager).ToHaveTextAsync(expectedTitle);
+        await Expect(HeadeCompletePager).ToBeVisibleAsync();
     }
 }

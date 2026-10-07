@@ -7,9 +7,9 @@ public class CheckoutPage2
     private readonly IPage Page;
     
     private ILocator FinishButton => Page.GetByRole(AriaRole.Button, new() { Name = "Finish" });
-    
     private ILocator ProductName(string productName) =>
         Page.Locator(".cart_item").Filter(new() { HasText = productName });
+    private ILocator PageTitle => Page.Locator("[data-test='title']"); 
     
     public CheckoutPage2(IPage page)
     {
@@ -24,5 +24,9 @@ public class CheckoutPage2
     public async Task ClickFinishAsync()
     {
         await FinishButton.ClickAsync();
+    }
+    public async Task<bool> IsTitleVisibleAsync()
+    {
+        return await PageTitle.IsVisibleAsync();
     }
 }

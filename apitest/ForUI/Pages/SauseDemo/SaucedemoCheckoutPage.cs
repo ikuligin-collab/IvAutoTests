@@ -10,6 +10,7 @@ public class CheckoutPage
     private ILocator LastNameInput => Page.GetByPlaceholder("Last Name");
     private ILocator PostalCodeInput => Page.GetByPlaceholder("Zip/Postal Code");
     private ILocator ContinueButton => Page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
+    private ILocator PageTitle => Page.Locator("[data-test='title']"); 
 
     public CheckoutPage(IPage page)
     {
@@ -22,5 +23,9 @@ public class CheckoutPage
         await LastNameInput.FillAsync(lastName);
         await PostalCodeInput.FillAsync(postalCode);
         await ContinueButton.ClickAsync();
+    }
+    public async Task<bool> IsTitleVisibleAsync()
+    {
+        return await PageTitle.IsVisibleAsync();
     }
 }

@@ -84,6 +84,6 @@ public class SaucedemoTest : BaseTest
         //Страница финального чекаута
         await checkoutCompletePage
             .VerifyTitleCheckoutAsync(
-                "Checkout: Complete!"); // проверка, что хедер видим и имеет текст "Checkout: Complete!
+                "Thank you for your order!"); // проверка, что хедер видим и имеет текст "Thank you for your order!"
     }
 }

@@ -119,5 +119,18 @@ public class HerokuTests : BaseTest
         FramesPage framesPage = new FramesPage(Page);
         await framesPage.OpenFramesPageAsync();
         await framesPage.ClickNastedFramesLink();
+        NastedFramePage nestedFramesPage = new NastedFramePage(Page);
+        var leftText = await nestedFramesPage.GetTextFromLeftFrameAsync();
+        leftText.Should().Contain("LEFT");
+    }
+    [Test]
+    public async Task BotomFrameTest()
+    {
+        FramesPage framesPage = new FramesPage(Page);
+        await framesPage.OpenFramesPageAsync();
+        await framesPage.ClickNastedFramesLink();
+        NastedFramePage nestedFramesPage = new NastedFramePage(Page);
+        var leftText = await nestedFramesPage.GetTextFromBottomFrameAsync();
+        leftText.Should().Contain("BOTTOM");
     }
 }

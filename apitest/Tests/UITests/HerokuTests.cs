@@ -112,4 +112,12 @@ public class HerokuTests : BaseTest
         // Проверка: осталась 1 кнопка
         await addRemovePage.CheckNumberOfButtonAsync("Delete", 1);
     }
+
+    [Test]
+    public async Task LeftFrameTest()
+    {
+        FramesPage framesPage = new FramesPage(Page);
+        await framesPage.OpenFramesPageAsync();
+        await framesPage.ClickNastedFramesLink();
+    }
 }
